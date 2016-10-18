@@ -14,7 +14,7 @@ defmodule DemoCookieParser.Mixfile do
   #
   # Type "mix help compile.app" for more information
   def application do
-    [applications: [:logger, :plug, :httpoison]]
+    [applications: [:logger, :plug, :httpoison, :timex]]
   end
 
   # Dependencies can be Hex packages:
@@ -28,6 +28,7 @@ defmodule DemoCookieParser.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [
+      {:timex, "~> 3.1"},
       {:plug, "~> 1.2"},
       {:httpoison, "~> 0.9.2"}
     ]
