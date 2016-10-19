@@ -1,10 +1,13 @@
 defmodule DemoCookieParser do
   alias Plug.Conn.Cookies
 
+  @url "https://deliveroo.co.uk/"
+
   def run do
-    hh = DemoCookieParser.headers "https://deliveroo.co.uk/"
-    cc = DemoCookieParser.cookie_values hh
-    cm = DemoCookieParser.analize_cookies cc
+    @url
+    |> headers
+    |> cookie_values
+    |> analize_cookies
   end
 
   def headers(url \\ "https://www.google.co.uk/") do
@@ -36,6 +39,23 @@ defmodule DemoCookieParser do
       |> Enum.map(&String.strip/1)
 
     [name, value] = String.split(cookie_value, "=")
-    {name, [ "value=#{value}" |attributes]}
+    attrs = ["value=#{value}" | attributes]
+    {name, attr_list_to_map(attrs)}
+  end
+
+  defp attr_list_to_map(list) when is_list(list) do
+    list
+    |> Enum.map(&parse_attribute/1)
+    |> Enum.into(%{})
+  end
+
+
+  defp parse_attribute(str) do
+    parts = String.split(str, "=")
+    case length(parts) do
+      2 -> List.to_tuple(parts)
+      1 -> {hd(parts), true}
+      _ -> nil
+    end
   end
 end
